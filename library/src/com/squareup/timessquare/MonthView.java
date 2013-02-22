@@ -32,7 +32,14 @@ public class MonthView extends LinearLayout {
 
   public static MonthView create(ViewGroup parent, LayoutInflater inflater,
       DateFormat weekdayNameFormat, Listener listener, Calendar today) {
-    final MonthView view = (MonthView) inflater.inflate(R.layout.month, parent, false);
+
+    return create(R.layout.month, parent, inflater, weekdayNameFormat, listener, today);
+  }
+
+  public static MonthView create(int layoutId, ViewGroup parent, LayoutInflater inflater,
+      DateFormat weekdayNameFormat, Listener listener, Calendar today) {
+
+    final MonthView view = (MonthView) inflater.inflate(layoutId, parent, false);
 
     final int originalDayOfWeek = today.get(Calendar.DAY_OF_WEEK);
 
@@ -55,6 +62,16 @@ public class MonthView extends LinearLayout {
     super.onFinishInflate();
     title = (TextView) findViewById(R.id.title);
     grid = (CalendarGridView) findViewById(R.id.calendar_grid);
+
+    if (title == null) {
+      throw new RuntimeException(
+        "Your content must have a TextView whose id attribute is 'R.id.title'");
+    }
+
+    if (grid == null) {
+      throw new RuntimeException(
+        "Your content must have a CalendarGridView whose id attribute is 'R.id.grid'");
+    }
   }
 
   /**
