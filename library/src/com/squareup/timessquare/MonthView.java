@@ -125,14 +125,7 @@ public class MonthView extends LinearLayout {
           MonthCellDescriptor cell = week.get(c);
           CheckedTextView cellView = (CheckedTextView) weekRow.getChildAt(c);
           cellView.setText(Integer.toString(cell.getValue()));
-          cellView.setEnabled(cell.isCurrentMonth());
-          cellView.setChecked(!cell.isToday());
-          cellView.setSelected(cell.isSelected());
-          if (cell.isSelectable()) {
-            cellView.setTextColor(getResources().getColorStateList(R.color.calendar_text_selector));
-          } else {
-            cellView.setTextColor(getResources().getColor(R.color.calendar_text_unselectable));
-          }
+          stylizeCellView(cellView, cell);
           cellView.setTag(cell);
         }
       } else {
@@ -140,6 +133,17 @@ public class MonthView extends LinearLayout {
       }
     }
     Logr.d("MonthView.init took %d ms", System.currentTimeMillis() - start);
+  }
+
+  protected void stylizeCellView(CheckedTextView cellView, MonthCellDescriptor cell) {
+    cellView.setEnabled(cell.isCurrentMonth());
+    cellView.setChecked(!cell.isToday());
+    cellView.setSelected(cell.isSelected());
+    if (cell.isSelectable()) {
+      cellView.setTextColor(getResources().getColorStateList(R.color.calendar_text_selector));
+    } else {
+      cellView.setTextColor(getResources().getColor(R.color.calendar_text_unselectable));
+    }
   }
 
   public interface Listener {
