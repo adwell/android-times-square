@@ -2,6 +2,7 @@
 package com.squareup.timessquare;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.AttributeSet;
@@ -21,7 +22,17 @@ public class CalendarGridView extends ViewGroup {
 
   public CalendarGridView(Context context, AttributeSet attrs) {
     super(context, attrs);
-    dividerPaint.setColor(getResources().getColor(R.color.calendar_divider));
+
+    // Default value
+    int gridColor = getResources().getColor(R.color.calendar_divider);
+
+    // Check for style overrides
+    final TypedArray a =
+        context.obtainStyledAttributes(attrs, R.styleable.CalendarGridView);
+    gridColor = a.getColor(R.styleable.CalendarGridView_gridColor, gridColor);
+    a.recycle();
+
+    dividerPaint.setColor(gridColor);
   }
 
   @Override public void addView(View child, int index, ViewGroup.LayoutParams params) {
