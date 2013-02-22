@@ -11,6 +11,19 @@ import android.widget.TextView;
 import java.text.DateFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Date;
+
+import static java.util.Calendar.DATE;
+import static java.util.Calendar.DAY_OF_MONTH;
+import static java.util.Calendar.DAY_OF_WEEK;
+import static java.util.Calendar.HOUR_OF_DAY;
+import static java.util.Calendar.MILLISECOND;
+import static java.util.Calendar.MINUTE;
+import static java.util.Calendar.MONTH;
+import static java.util.Calendar.SECOND;
+import static java.util.Calendar.SUNDAY;
+import static java.util.Calendar.YEAR;
 
 public class MonthView extends LinearLayout {
   private TextView title;
@@ -42,6 +55,41 @@ public class MonthView extends LinearLayout {
     super.onFinishInflate();
     title = (TextView) findViewById(R.id.title);
     grid = (CalendarGridView) findViewById(R.id.calendar_grid);
+  }
+
+  /**
+   * Simple form of init for drawing a static calendar with nothing selectable.
+   */
+  public void init(DateFormat monthNameFormat, Calendar startCal) {
+    final MonthDescriptor month = new MonthDescriptor(startCal.get(MONTH), startCal.get(YEAR),
+        monthNameFormat.format(startCal.getTime()));
+
+    Calendar cal = Calendar.getInstance();
+    cal.setTime(startCal.getTime());
+    List<List<MonthCellDescriptor>> cells = new ArrayList<List<MonthCellDescriptor>>();
+    cal.set(DAY_OF_MONTH, 1);
+    int firstDayOfWeek = cal.get(DAY_OF_WEEK);
+    cal.add(DATE, SUNDAY - firstDayOfWeek);
+    while ((cal.get(MONTH) < month.getMonth() + 1 || cal.get(YEAR) < month.getYear()) //
+        && cal.get(YEAR) <= month.getYear()) {
+      Logr.d("Building week row starting at %s", cal.getTime());
+      List<MonthCellDescriptor> weekCells = new ArrayList<MonthCellDescriptor>();
+      cells.add(weekCells);
+      for (int c = 0; c < 7; c++) {
+        Date date = cal.getTime();
+        boolean isCurrentMonth = cal.get(MONTH) == month.getMonth();
+        boolean isSelected = false;
+        boolean isSelectable = false;
+        boolean isToday = false;
+        int value = cal.get(DAY_OF_MONTH);
+        MonthCellDescriptor cell =
+            new MonthCellDescriptor(date, isCurrentMonth, isSelectable, isSelected, isToday, value);
+        weekCells.add(cell);
+        cal.add(DATE, 1);
+      }
+    }
+
+    init(month, cells);
   }
 
   public void init(MonthDescriptor month, List<List<MonthCellDescriptor>> cells) {
