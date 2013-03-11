@@ -26,12 +26,6 @@ public class CalendarRowView extends ViewGroup implements View.OnClickListener {
   }
 
   @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-    if (getMeasuredHeight() > 0 && getMeasuredWidth() > 0) {
-      Logr.d("SKIP Row.onMeasure");
-      setMeasuredDimension(getMeasuredWidth(), getMeasuredHeight());
-      return;
-    }
-
     long start = System.currentTimeMillis();
     final int totalWidth = MeasureSpec.getSize(widthMeasureSpec);
     cellSize = totalWidth / 7;
