@@ -83,6 +83,11 @@ public class MonthView extends LinearLayout {
 
     Calendar cal = Calendar.getInstance();
     cal.setTime(startCal.getTime());
+    cal.set(HOUR_OF_DAY, 0);
+    cal.set(MINUTE, 0);
+    cal.set(SECOND, 0);
+    cal.set(MILLISECOND, 0);
+
     List<List<MonthCellDescriptor>> cells = new ArrayList<List<MonthCellDescriptor>>();
     cal.set(DAY_OF_MONTH, 1);
     int firstDayOfWeek = cal.get(DAY_OF_WEEK);
