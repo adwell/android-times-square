@@ -134,7 +134,7 @@ public class MonthView extends LinearLayout {
           cellView.setTag(cell);
         }
       } else {
-        weekRow.setVisibility(GONE);
+        weekRow.setVisibility(hideEmptyWeeks() ? GONE : VISIBLE);
       }
     }
     Logr.d("MonthView.init took %d ms", System.currentTimeMillis() - start);
@@ -149,6 +149,13 @@ public class MonthView extends LinearLayout {
     } else {
       cellView.setTextColor(getResources().getColor(R.color.calendar_text_unselectable));
     }
+  }
+
+  // Should we hide rows at the end of the month that contain no days or leave
+  // an empty row in place?  Return false if you want all months to be the same
+  // height regardless of the number of days.
+  protected boolean hideEmptyWeeks() {
+    return true;
   }
 
   public interface Listener {
