@@ -93,6 +93,9 @@ public class CalendarRangePickerView extends ListView
     maxCal.setTime(maxDate);
     setMidnight(minCal);
     setMidnight(maxCal);
+    // maxDate is exclusive: bump back to the previous day so if maxDate is the first of a month,
+    // we don't accidentally include that month in the view.
+    maxCal.add(MINUTE, -1);
 
     // Validate initial range.  Validation must happen after we set minCal/maxCal
     validateRange(selectedStartDate, selectedEndDate);
