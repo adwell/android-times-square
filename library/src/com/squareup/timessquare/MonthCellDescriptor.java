@@ -12,7 +12,7 @@ public class MonthCellDescriptor {
   private final boolean isToday;
   private final boolean isSelectable;
 
-  MonthCellDescriptor(Date date, boolean currentMonth, boolean selectable, boolean selected,
+  public MonthCellDescriptor(Date date, boolean currentMonth, boolean selectable, boolean selected,
       boolean today, int value) {
     this.date = date;
     isCurrentMonth = currentMonth;

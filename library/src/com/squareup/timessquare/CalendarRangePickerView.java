@@ -69,6 +69,10 @@ public class CalendarRangePickerView extends ListView
     fullDateFormat = DateFormat.getDateInstance(DateFormat.MEDIUM);
   }
 
+  protected int getMonthResourceId() {
+    return R.layout.month;
+  }
+
   public void init(Date minDate, Date maxDate) {
     init(null, null, minDate, maxDate);
   }
@@ -312,7 +316,7 @@ public class CalendarRangePickerView extends ListView
     @Override public View getView(int position, View convertView, ViewGroup parent) {
       MonthView monthView = (MonthView) convertView;
       if (monthView == null) {
-        monthView = MonthView.create(parent, inflater, weekdayNameFormat,
+        monthView = MonthView.create(getMonthResourceId(), parent, inflater, weekdayNameFormat,
                                      CalendarRangePickerView.this, today);
       }
       monthView.init(months.get(position), cells.get(position));
@@ -345,7 +349,7 @@ public class CalendarRangePickerView extends ListView
         boolean isToday = sameDate(cal, today);
         int value = cal.get(DAY_OF_MONTH);
         MonthCellDescriptor cell =
-            new MonthCellDescriptor(date, isCurrentMonth, isSelectable, isSelected, isToday, value);
+          createDescriptor(date, isCurrentMonth, isSelectable, isSelected, isToday, value);
         if (isSelected) {
           selectedCells.add(cell);
         }
@@ -354,6 +358,13 @@ public class CalendarRangePickerView extends ListView
       }
     }
     return cells;
+  }
+
+  protected MonthCellDescriptor createDescriptor(Date date, boolean currentMonth,
+                                                 boolean selectable, boolean selected,
+                                                 boolean today, int value) {
+
+    return new MonthCellDescriptor(date, currentMonth, selectable, selected, today, value);
   }
 
   private static boolean sameDate(Calendar cal, Calendar selectedDate) {
