@@ -58,8 +58,6 @@ public class CalendarRangePickerView extends ListView
   public CalendarRangePickerView(Context context, AttributeSet attrs) {
     super(context, attrs);
     adapter = new MonthAdapter();
-    setDivider(null);
-    setDividerHeight(0);
     setAdapter(adapter);
     final int bg = getResources().getColor(R.color.calendar_bg);
     setBackgroundColor(bg);
