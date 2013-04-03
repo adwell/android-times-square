@@ -265,7 +265,7 @@ public class CalendarRangePickerView extends ListView
 
     // Notify our listener
     if (listener != null) {
-      if (endDate == null) {
+      if (startDate != null && endDate == null) {
         listener.onRangeStarted();
       } else {
         listener.onRangeCompleted();
