@@ -75,6 +75,19 @@ public class CalendarRangePickerView extends ListView
     init(null, null, minDate, maxDate);
   }
 
+  /**
+   * All date parameters must be non-null and their {@link java.util.Date#getTime()} must not return
+   * 0.  Time of day will be ignored.  For instance, if you pass in {@code minDate} as 11/16/2012
+   * 5:15pm and {@code maxDate} as 11/16/2013 4:30am, 11/16/2012 will be the first selectable date
+   * and 11/15/2013 will be the last selectable date ({@code maxDate} is exclusive).
+   *
+   * @param selectedStartDate Earliest initially selected date, inclusive.  Must
+   * be between {@code minDate} and {@code maxDate}.
+   * @param selectedEndDate Latest initially selected date, inclusive.  Must
+   * be between {@code minDate} and {@code maxDate}.
+   * @param minDate Earliest selectable date, inclusive.  Must be earlier than {@code maxDate}.
+   * @param maxDate Latest selectable date, exclusive.  Must be later than {@code minDate}.
+   */
   public void init(Date selectedStartDate, Date selectedEndDate, Date minDate, Date maxDate) {
     if (minDate == null || maxDate == null) {
       throw new IllegalArgumentException("Min/max dates must be non-null");
@@ -322,6 +335,12 @@ public class CalendarRangePickerView extends ListView
     }
   }
 
+  /**
+   * @param month Descriptor for month we are working with
+   * @param startCal Calendar for the month we are working with
+   * @param selectedStartDate Earliest initially selected date, inclusive.
+   * @param selectedEndDate Latest initially selected date, inclusive.
+   */
   List<List<MonthCellDescriptor>> getMonthCells(MonthDescriptor month, Calendar startCal,
       Calendar selectedStartDate, Calendar selectedEndDate) {
 
@@ -341,7 +360,7 @@ public class CalendarRangePickerView extends ListView
         Date date = cal.getTime();
         boolean isCurrentMonth = cal.get(MONTH) == month.getMonth();
         boolean isSelected = isCurrentMonth &&
-          betweenDates(cal, selectedStartDate, selectedEndDate);
+          betweenDates(cal, selectedStartDate, selectedEndDate, true, true);
 
         boolean isSelectable = isCurrentMonth && betweenDates(cal, minCal, maxCal);
         boolean isToday = sameDate(cal, today);
