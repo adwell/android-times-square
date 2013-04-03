@@ -371,11 +371,28 @@ public class CalendarRangePickerView extends ListView
         && cal.get(DAY_OF_MONTH) == selectedDate.get(DAY_OF_MONTH);
   }
 
+  /**
+   * Include minCal but exclude maxCal
+   */
   private static boolean betweenDates(Calendar cal, Calendar minCal, Calendar maxCal) {
-    return betweenDates(cal.getTime(), minCal, maxCal);
+    return betweenDates(cal, minCal, maxCal, true, false);
   }
 
-  static boolean betweenDates(Date date, Calendar minCal, Calendar maxCal) {
+  private static boolean betweenDates(Calendar cal, Calendar minCal, Calendar maxCal,
+                                      boolean includeMin, boolean includeMax) {
+    return betweenDates(cal.getTime(), minCal, maxCal, includeMin, includeMax);
+  }
+
+  /**
+   * Include minCal but exclude maxCal
+   */
+  private static boolean betweenDates(Date date, Calendar minCal, Calendar maxCal) {
+    return betweenDates(date, minCal, maxCal, true, false);
+  }
+
+  private static boolean betweenDates(Date date, Calendar minCal, Calendar maxCal,
+                                      boolean includeMin, boolean includeMax) {
+
     Date min = null;
     Date max = null;
 
@@ -386,15 +403,15 @@ public class CalendarRangePickerView extends ListView
       max = maxCal.getTime();
     }
 
-    return betweenDates(date, min, max);
+    return betweenDates(date, min, max, includeMin, includeMax);
   }
 
-  // Defaults to include min but exclude max
-  static boolean betweenDates(Date date, Date min, Date max) {
+  // Include min but exclude max
+  private static boolean betweenDates(Date date, Date min, Date max) {
     return betweenDates(date, min, max, true, false);
   }
 
-  static boolean betweenDates(Date date, Date min, Date max, boolean includeMin, boolean includeMax) {
+  private static boolean betweenDates(Date date, Date min, Date max, boolean includeMin, boolean includeMax) {
     if (date != null && min != null) {
       // Case 1: No max date.  Only a match if we are exactly on the min date.
       if (max == null && includeMin && date.equals(min)) {
