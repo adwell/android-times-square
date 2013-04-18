@@ -3,6 +3,7 @@
 
   <declare-styleable name="CalendarGridView">
     <attr name="gridColor" format="reference|color"/>
+    <attr name="cellAspectRatio" format="float"/>
   </declare-styleable>
 
 </resources>

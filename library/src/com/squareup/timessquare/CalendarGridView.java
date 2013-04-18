@@ -19,6 +19,7 @@ import static android.view.View.MeasureSpec.makeMeasureSpec;
  */
 public class CalendarGridView extends ViewGroup {
   private final Paint dividerPaint = new Paint();
+  private float aspectRatio = 1f;
 
   public CalendarGridView(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -30,6 +31,7 @@ public class CalendarGridView extends ViewGroup {
     final TypedArray a =
         context.obtainStyledAttributes(attrs, R.styleable.CalendarGridView);
     gridColor = a.getColor(R.styleable.CalendarGridView_gridColor, gridColor);
+    aspectRatio = a.getFloat(R.styleable.CalendarGridView_cellAspectRatio, aspectRatio);
     a.recycle();
 
     dividerPaint.setColor(gridColor);
@@ -69,16 +71,17 @@ public class CalendarGridView extends ViewGroup {
   @Override protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
     long start = System.currentTimeMillis();
     int totalWidth = MeasureSpec.getSize(widthMeasureSpec);
-    int cellSize = totalWidth / 7;
-    totalWidth = cellSize * 7; // Remove any extra pixels since /7 is unlikely to give whole nums.
+    int cellWidth = totalWidth / 7;
+    int cellHeight = Math.round(cellWidth / aspectRatio);
+    totalWidth = cellWidth * 7; // Remove any extra pixels since /7 is unlikely to give whole nums.
     int totalHeight = 0;
     final int rowWidthSpec = makeMeasureSpec(totalWidth, EXACTLY);
-    final int rowHeightSpec = makeMeasureSpec(cellSize, EXACTLY);
+    final int rowHeightSpec = makeMeasureSpec(cellHeight, EXACTLY);
     for (int c = 0, numChildren = getChildCount(); c < numChildren; c++) {
       final View child = getChildAt(c);
       if (child.getVisibility() == View.VISIBLE) {
         if (c == 0) { // It's the header: height should be wrap_content.
-          measureChild(child, rowWidthSpec, makeMeasureSpec(cellSize, AT_MOST));
+          measureChild(child, rowWidthSpec, makeMeasureSpec(cellHeight, AT_MOST));
         } else {
           measureChild(child, rowWidthSpec, rowHeightSpec);
         }

@@ -14,7 +14,7 @@ import static android.view.View.MeasureSpec.makeMeasureSpec;
 public class CalendarRowView extends ViewGroup implements View.OnClickListener {
   private boolean isHeaderRow;
   private MonthView.Listener listener;
-  private int cellSize;
+  private int cellWidth;
   private int oldWidthMeasureSpec;
   private int oldHeightMeasureSpec;
 
@@ -36,9 +36,10 @@ public class CalendarRowView extends ViewGroup implements View.OnClickListener {
 
     long start = System.currentTimeMillis();
     final int totalWidth = MeasureSpec.getSize(widthMeasureSpec);
-    cellSize = totalWidth / 7;
-    int cellWidthSpec = makeMeasureSpec(cellSize, EXACTLY);
-    int cellHeightSpec = isHeaderRow ? makeMeasureSpec(cellSize, AT_MOST) : cellWidthSpec;
+    cellWidth = totalWidth / 7;
+    int cellWidthSpec = makeMeasureSpec(cellWidth, EXACTLY);
+    int cellHeight = MeasureSpec.getSize(heightMeasureSpec);
+    int cellHeightSpec = makeMeasureSpec(cellHeight, isHeaderRow ? AT_MOST : EXACTLY);
     int rowHeight = 0;
     for (int c = 0, numChildren = getChildCount(); c < numChildren; c++) {
       final View child = getChildAt(c);
@@ -61,7 +62,7 @@ public class CalendarRowView extends ViewGroup implements View.OnClickListener {
     int cellHeight = bottom - top;
     for (int c = 0, numChildren = getChildCount(); c < numChildren; c++) {
       final View child = getChildAt(c);
-      child.layout(c * cellSize, 0, (c + 1) * cellSize, cellHeight);
+      child.layout(c * cellWidth, 0, (c + 1) * cellWidth, cellHeight);
     }
     Logr.d("Row.onLayout %d ms", System.currentTimeMillis() - start);
   }
